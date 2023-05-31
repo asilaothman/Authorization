@@ -1,0 +1,35 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['email'])) {
+    // User not authenticated, redirect to login page
+    header('Location: login.html');
+    exit();
+}
+
+// Check the user's role for authorization
+$role = $_SESSION['role'];
+if ($role !== 'user' && $role !== 'admin') {
+    // User does not have permission, redirect to an unauthorized page
+    header('Location: unauthorized.html');
+    exit();
+}
+
+// Display the protected content of the student details page
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Details</title>
+</head>
+<body>
+    <h1>Welcome, <?php echo $_SESSION['email']; ?></h1>
+    <p>Student details go here...</p>
+    <?php if ($role === 'admin'): ?>
+        <!-- Show additional admin-specific content -->
+        <a href="manage_users.php">Manage Users</a>
+    <?php endif; ?>
+    <a href="logout.php">Logout</a>
+</body>
+</html>
